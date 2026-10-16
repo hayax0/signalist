@@ -1,138 +1,136 @@
-# 📈 Signalist - AI-Powered Investment Platform
+# Signalist
 
+Plataforma web para acompanhar o mercado financeiro, organizar uma watchlist e receber resumos personalizados de notícias com inteligência artificial.
 
-**Signalist** is a full-stack investment analysis platform designed to help users track market trends. It leverages **Generative AI** to provide personalized onboarding experiences and financial insights based on the user's risk profile.
+O Signalist reúne dados de ações e criptomoedas em um dashboard responsivo, permite que cada usuário acompanhe seus ativos favoritos e usa IA para transformar notícias de mercado em resumos mais relevantes ao seu perfil.
 
-The project focuses on a robust **Event-Driven Architecture**, ensuring that heavy tasks (like AI generation and email dispatch) are handled asynchronously without impacting the user experience.
+## Funcionalidades
 
----
+- Dashboard com visão geral de ações, criptomoedas e notícias do mercado
+- Busca de ativos e consulta de cotações pela Finnhub
+- Watchlist individual para usuários autenticados
+- Cadastro e login com e-mail e senha
+- Autenticação social com GitHub
+- Onboarding com perfil de investimento, objetivos e tolerância a risco
+- E-mail de boas-vindas personalizado com Gemini
+- Resumo diário de notícias baseado nos ativos acompanhados
+- Processamento assíncrono e tarefas agendadas com Inngest
+- Persistência de usuários e watchlists no MongoDB
+- Tratamento de limites e falhas da API de mercado
 
+## Tecnologias
 
-##  Key Features
+### Front-end
 
- **AI-Powered Onboarding:** Uses **Google Gemini** to analyze user data (investment goals, risk tolerance) and generate personalized welcome emails in real-time.
- **Event-Driven Architecture:** Integrated with **Inngest** to handle background jobs and queues. User actions trigger asynchronous events for reliable data processing.
- **Financial Dashboard:** Real-time visualization of market data (Stocks, Crypto) with interactive charts.
- **Secure Authentication:** Robust auth system using **Better-Auth** with secure session management (HttpOnly Cookies) and Middleware protection.
- **Automated Email System:** Transactional emails sent via **Resend**, orchestrated by Inngest workflows.
- **Desktop-First Design:** Optimized for large screens to provide detailed analytical tools and charts.
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Radix UI
+- React Hook Form
+- Lucide React
+- next-themes
 
----
+### Back-end e integrações
 
-## Tech Stack
+- Server Actions e Route Handlers do Next.js
+- Better Auth
+- MongoDB e Mongoose
+- Finnhub API
+- Google Gemini
+- Inngest
+- Nodemailer
 
-### Core
-* **Framework:** [Next.js 14](https://nextjs.org/) (App Router)
-* **Language:** [TypeScript](https://www.typescriptlang.org/)
-* **Styling:** [Tailwind CSS](https://tailwindcss.com/) + [Shadcn UI](https://ui.shadcn.com/)
+## Como funciona
 
-### Backend & Infrastructure
-* **Database:** [MongoDB](https://www.mongodb.com/) (Mongoose)
-* **Event Bus / Queues:** [Inngest](https://www.inngest.com/)
-* **AI Model:** [Google Gemini API](https://ai.google.dev/)
-* **Email Service:** [Resend](https://resend.com/)
-* **Deployment:** [Vercel](https://vercel.com/)
+1. O usuário cria uma conta ou entra com o GitHub.
+2. Durante o onboarding, informa objetivos, interesses e tolerância a risco.
+3. O Signalist usa esses dados para gerar uma apresentação personalizada com Gemini.
+4. O usuário pesquisa ativos e adiciona ações ou criptomoedas à watchlist.
+5. O dashboard consulta cotações e notícias pela Finnhub.
+6. Uma função agendada pelo Inngest reúne as notícias relacionadas à watchlist.
+7. O Gemini gera um resumo e o Nodemailer envia o conteúdo por e-mail.
 
----
+## Executando localmente
 
-## Architecture
+### Pré-requisitos
 
-The application follows a modern serverless architecture:
+- Node.js 20 ou superior
+- npm
+- Uma instância do MongoDB
+- Credenciais para Finnhub, Gemini, GitHub OAuth, Inngest e uma conta Gmail com senha de app
 
-1.  **User Action:** User signs up via the frontend.
-2.  **Auth Layer:** Session is created and stored securely.
-3.  **Event Trigger:** An event `app/user.created` is sent to Inngest.
-4.  **Background Job:** Inngest picks up the event asynchronously.
-    * *Step 1:* Fetches user profile data.
-    * *Step 2:* Calls **Google Gemini** to generate a personalized intro text.
-    * *Step 3:* Sends the email via **Resend**.
-5.  **Completion:** User receives the email without loading delays on the site.
+### Instalação
 
----
+```bash
+git clone https://github.com/hayax0/Stocks_App.git
+cd Stocks_App
+npm install
+```
 
-## Getting Started
+Crie um arquivo `.env.local` na raiz do projeto:
 
-Follow these steps to run the project locally:
+```env
+MONGODB_URI=
+BETTER_AUTH_SECRET=
+BETTER_AUTH_BASE_URL=http://localhost:3000
 
-### Prerequisites
-* Node.js (v18+)
-* MongoDB Atlas URI
-* API Keys for Google Gemini, Resend, and Inngest.
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
 
-### Installation
+NEXT_PUBLIC_FINNHUB_API_KEY=
+GEMINI_API_KEY=
 
-1.  **Clone the repository**
-    ```bash
-    git clone [https://github.com/seu-usuario/signalist.git](https://github.com/seu-usuario/signalist.git)
-    cd signalist
-    ```
+INNGEST_EVENT_KEY=
+INNGEST_SIGNING_KEY=
 
-2.  **Install dependencies**
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
+NODEMAILER_EMAIL=
+NODEMAILER_PASSWORD=
+```
 
-3.  **Set up Environment Variables**
-    Create a `.env` file in the root directory and add the following:
+Depois, inicie o ambiente de desenvolvimento:
 
-    ```env
-    # Database
-    DATABASE_URL=your_mongodb_connection_string
+```bash
+npm run dev
+```
 
-    # Auth
-    BETTER_AUTH_SECRET=your_auth_secret
-    NEXT_PUBLIC_WEBSITE_URL=http://localhost:3000
+A aplicação estará disponível em [http://localhost:3000](http://localhost:3000).
 
-    # AI & Email
-    GEMINI_API_KEY=your_gemini_key
-    RESEND_API_KEY=your_resend_key
+> Para o envio com Gmail, use uma senha de app em `NODEMAILER_PASSWORD`; não utilize a senha principal da conta.
 
-    # Inngest
-    INNGEST_EVENT_KEY=local
-    INNGEST_SIGNING_KEY=your_inngest_signing_key
-    ```
+## Scripts
 
-4.  **Run the development server**
-    ```bash
-    npm run dev
-    ```
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
 
-5.  **Start Inngest Dev Server (for background jobs)**
-    In a separate terminal:
-    ```bash
-    npx inngest-cli@latest dev
-    ```
+## Estrutura principal
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+```text
+app/
+├── (auth)/          # Cadastro, login e onboarding
+├── (root)/          # Dashboard e páginas autenticadas
+└── api/inngest/     # Endpoint das funções do Inngest
 
----
+components/          # Componentes de interface
+database/            # Conexão e modelos do MongoDB
+lib/
+├── actions/         # Dados de mercado e operações da watchlist
+├── better-auth/     # Configuração de autenticação
+├── inngest/         # Eventos, funções e prompts de IA
+└── nodemailer/      # Templates e envio de e-mails
+```
 
-## Roadmap & Improvements
+## Decisões técnicas
 
-* [ ] **Mobile Optimization:** Refactor layouts for better mobile responsiveness.
-* [ ] **Advanced Charts:** Add technical indicators (RSI, MACD) to the dashboard.
-* [ ] **Portfolio Tracking:** Allow users to add manual transactions.
+- As chamadas à Finnhub usam cache e tratamento específico para respostas `403` e `429`.
+- As consultas da watchlist são feitas de forma controlada para reduzir o risco de exceder o limite da API.
+- As rotinas de e-mail ficam fora do fluxo principal da aplicação e são executadas pelo Inngest.
+- A autenticação e os dados da watchlist são associados ao usuário armazenado no MongoDB.
 
----
+## Estado do projeto
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1.  Fork the project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
----
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-Developed with ❤️ by **Caio Campos**.
+O projeto já possui o fluxo principal implementado: autenticação, onboarding, dashboard, consulta de mercado, watchlist e automações de e-mail com IA. Os próximos passos mais importantes são adicionar testes automatizados, ampliar a observabilidade e documentar o processo de deploy.
