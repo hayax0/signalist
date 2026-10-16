@@ -63,8 +63,8 @@ O Signalist reúne dados de ações e criptomoedas em um dashboard responsivo, p
 ### Instalação
 
 ```bash
-git clone https://github.com/hayax0/Stocks_App.git
-cd Stocks_App
+git clone https://github.com/hayax0/signalist.git
+cd signalist
 npm install
 ```
 
